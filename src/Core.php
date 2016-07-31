@@ -20,7 +20,7 @@ use samsonphp\event\Event;
 class Core implements CoreInterface
 {
     /** @var string Current system environment */
-    protected $environment;
+    protected $environment = Scheme::BASE;
 
     /** @var Module[] Loaded modules collection */
     protected $modules = [];
@@ -41,7 +41,7 @@ class Core implements CoreInterface
      *
      * @return $this Chaining
      */
-    public function environment($environment = Scheme::BASE)
+    public function environment($environment)
     {
         // Fire core environment change
         Event::fire(self::E_ENVIRONMENT, [&$this, &$environment]);
