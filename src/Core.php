@@ -96,7 +96,11 @@ class Core implements CoreInterface
      */
     public function process(RequestInterface $request, ResponseInterface $response = null, callable $next = null)
     {
-        return $response;
+        if (is_callable($next)) {
+            return call_user_func($next, $request, $response);
+        } else { // No other middleware - return response
+            return $response;
+        }
     }
 
     /**
