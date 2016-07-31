@@ -109,7 +109,6 @@ class Core implements CoreInterface
     public function shutdown()
     {
         // Free memory
-        unset($this->modules);
-        unset($this->environment);
+        unset($this->modules, $this->environment);
     }
 }
