@@ -10,6 +10,10 @@ use samsonphp\event\Event;
 /**
  * Core
  *
+ * TODO: Middleware integration
+ * TODO: E404 handling, probably via middleware
+ * TODO: E*** handling, probably via middleware
+ *
  * @package samsonphp/core
  * @author Vitaly Iegorov <egorov@samsonos.com>
  */
@@ -93,5 +97,15 @@ class Core implements CoreInterface
     public function process(RequestInterface $request, ResponseInterface $response = null, callable $next = null)
     {
         return $response;
+    }
+
+    /**
+     * Core shutdown for termination and memory cleaning.
+     */
+    public function shutdown()
+    {
+        // Free memory
+        unset($this->modules);
+        unset($this->environment);
     }
 }

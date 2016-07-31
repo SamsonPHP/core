@@ -58,4 +58,9 @@ interface CoreInterface
      * @return ResponseInterface Processed response instance
      */
     public function process(RequestInterface $request, ResponseInterface $response = null, callable $next);
+
+    /**
+     * Core shutdown for termination and memory cleaning.
+     */
+    public function shutdown();
 }

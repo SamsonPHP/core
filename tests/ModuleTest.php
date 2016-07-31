@@ -26,6 +26,14 @@ class ModuleTest extends TestCase
         $this->reflection = new \ReflectionClass($this->core);
     }
 
+    public function testEnvironment()
+    {
+        $environment = 'test';
+        $this->core->environment($environment);
+
+        $this->assertEquals($environment, $this->getProperty('environment', $this->core));
+    }
+
     /**
      * Get $object private/protected property value.
      *
@@ -40,14 +48,6 @@ class ModuleTest extends TestCase
         $environmentProperty = $this->reflection->getProperty($property);
         $environmentProperty->setAccessible(true);
         return $environmentProperty->getValue($object);
-    }
-
-    public function testEnvironment()
-    {
-        $environment = 'test';
-        $this->core->environment($environment);
-
-        $this->assertEquals($environment, $this->getProperty('environment', $this->core));
     }
 
     public function testEnvironmentEventChangedValue()
@@ -116,5 +116,14 @@ class ModuleTest extends TestCase
         $moduleAlias = 'test';
         $this->core->load(new TestModule(), $moduleAlias);
         $this->core->load(new TestModule(), $moduleAlias);
+    }
+
+    public function testShutdown()
+    {
+        $moduleAlias = 'alias';
+        $this->core->load(new TestModule(), $moduleAlias);
+        $this->core->shutdown();
+
+        $this->assertEquals(null, $this->getProperty('modules', $this->core));
     }
 }
