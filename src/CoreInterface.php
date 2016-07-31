@@ -7,7 +7,6 @@ namespace samsonphp\core;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use samsonphp\config\Scheme;
 use samsonphp\core\exception\CannotLoadModule;
 
 /**
@@ -32,7 +31,7 @@ interface CoreInterface
      *
      * @return $this Chaining
      */
-    public function environment($environment = Scheme::BASE);
+    public function environment($environment);
 
     /**
      * Load module.
