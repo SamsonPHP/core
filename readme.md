@@ -10,25 +10,27 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/samsonos/php_core/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/samsonos/php_core/?branch=master)
 [![Stories in Ready](https://badge.waffle.io/samsonos/php_core.png?label=ready&title=Ready)](https://waffle.io/samsonos/php_core)
 
-##Using SamsonPHP in your project
-To use SamsonPHP framework in your project you must add its dependency in your ```composer.json```:
-```json
-    "require": {
-        "samsonos/php_core": "1.*"
-    }, 
-```
+##Documentation
+Follow [official documentation](http://github.com/SamsonPHP/core/blob/master/docs/Index.md).
+ 
+##Installation
+You can install this package through Composer:
+```composer require samsonphp/core```
+The packages adheres to the SemVer specification, and there will be full backward compatibility between minor versions.
 
-After doing ```composer install``` or ```composer update``` all SamsonPHP classes and functions would be available.
+##Testing
+```$ vendor/bin/phpunit```
 
-Example usage:
-```php
-// Run framework
-s()->start('main');
-```
+##Contributing
+Feel free to fork and create pull requests at any time.
 
-For further information read [Official SamsonPHP Wiki](https://github.com/samsonos/php_core/wiki)
+##Security
+If you discover any security related issues, please use this repository issue tracker.
 
-Developed by [SamsonOS](http://samsonos.com/)
+##License
+Open Software License ("OSL") v 3.0. Please [see License File](https://github.com/SamsonPHP/core/blob/master/license.md) for more information.
+ 
+[SamsonOS](http://samsonos.com)
 
 ![PHPStorm](https://lh3.googleusercontent.com/-yVTWu-r8fZ4/AAAAAAAAAAI/AAAAAAAAAAA/7Sddz6VRuyg/photo.jpg)
 
