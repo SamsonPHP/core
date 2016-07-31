@@ -3,7 +3,6 @@ namespace samsonphp\core;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use samsonframework\core\SystemInterface;
 use samsonphp\config\Scheme;
 use samsonphp\core\exception\CannotLoadModule;
 use samsonphp\event\Event;
@@ -85,14 +84,14 @@ class Core implements CoreInterface
      * Process request.
      * Method supports PSR middleware approach.
      *
-     * @param RequestInterface  $request Request instance
-     * @param ResponseInterface $response Response instance
-     * @param callable|null     $next Next callable middleware
+     * @param RequestInterface       $request  Request instance
+     * @param ResponseInterface|null $response Response instance
+     * @param callable|null          $next     Next callable middleware
      *
      * @return ResponseInterface Processed response instance
      */
-    public function process(RequestInterface $request, ResponseInterface $response, callable $next = null)
+    public function process(RequestInterface $request, ResponseInterface $response = null, callable $next = null)
     {
-
+        return $response;
     }
 }

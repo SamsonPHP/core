@@ -51,11 +51,11 @@ interface CoreInterface
      * Process request.
      * Method supports PSR middleware approach.
      *
-     * @param RequestInterface  $request Request instance
-     * @param ResponseInterface $response Response instance
-     * @param callable          $next Next callable middleware
+     * @param RequestInterface       $request  Request instance
+     * @param ResponseInterface|null $response Response instance
+     * @param callable               $next     Next callable middleware
      *
      * @return ResponseInterface Processed response instance
      */
-    public function process(RequestInterface $request, ResponseInterface $response, callable $next);
+    public function process(RequestInterface $request, ResponseInterface $response = null, callable $next);
 }
