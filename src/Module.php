@@ -2,7 +2,7 @@
 namespace samsonphp\core;
 
 /**
- * Module
+ * SamsonPHP Module
  *
  * @author Vitaly Iegorov <egorov@samsonos.com>
  */

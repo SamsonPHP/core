@@ -8,11 +8,14 @@ use samsonphp\core\exception\CannotLoadModule;
 use samsonphp\event\Event;
 
 /**
- * Core
+ * SamsonPHP Core
  *
  * TODO: Middleware integration
  * TODO: E404 handling, probably via middleware
  * TODO: E*** handling, probably via middleware
+ * TODO: Add routing, event or middleware
+ * TODO: Cache/Generated code management for nested modules
+ * TODO: Session management
  *
  * @package samsonphp/core
  * @author Vitaly Iegorov <egorov@samsonos.com>
