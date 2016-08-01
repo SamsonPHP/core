@@ -47,7 +47,11 @@ class ModuleTest extends TestCase
     {
         $environmentProperty = $this->reflection->getProperty($property);
         $environmentProperty->setAccessible(true);
-        return $environmentProperty->getValue($object);
+        try {
+            return $environmentProperty->getValue($object);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function testEnvironmentEventChangedValue()
