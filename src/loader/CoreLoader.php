@@ -1,5 +1,4 @@
 <?php declare(strict_types=1);
-
 namespace samsonphp\core\loader;
 
 use Doctrine\Common\Annotations\AnnotationReader;

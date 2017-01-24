@@ -29,6 +29,7 @@ class ComposerModuleManager implements ModuleManagerInterface
 
     /** @var array Collection of interface => [classes]*/
     public $implements = [];
+
     /** @var array Collection of class => class */
     protected $extends = [];
 
