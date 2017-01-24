@@ -2,7 +2,6 @@
 namespace samsonphp\core\loader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use samson\activerecord\dbMySQLConnector;
 use samson\core\CompressableExternalModule;
 use samson\core\CompressableService;
 use samson\core\Core;
@@ -39,7 +38,6 @@ use samsonframework\resource\ResourceMap;
 use samsonphp\core\loader\module\Module;
 use samsonphp\core\loader\module\ModuleManagerInterface;
 use samsonphp\event\Event;
-use samsonphp\i18n\i18n;
 
 /**
  * Class CoreLoader
@@ -97,7 +95,7 @@ class CoreLoader
                 } else {
                     // Generate identifier from module class
                     $classDefinition->setServiceName(
-                        strtolower(ltrim(str_replace(__NS_SEPARATOR__, '_', $module->className), '_'))
+                        strtolower(ltrim(str_replace('\\', '_', $module->className), '_'))
                     );
                 }
                 $classDefinition->addScope(new ModuleScope())->setIsSingleton(true);
