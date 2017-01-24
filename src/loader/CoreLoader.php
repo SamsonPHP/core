@@ -1,6 +1,15 @@
 <?php declare(strict_types=1);
 namespace samsonphp\core\loader;
 
+// TODO: This should be loaded via composer auto loader
+require __DIR__.'/../deprecated/iModule.php';
+require __DIR__.'/../deprecated/Module.php';
+require __DIR__.'/../deprecated/ExternalModule.php';
+require __DIR__.'/../deprecated/VirtualModule.php';
+require __DIR__.'/../deprecated/Service.php';
+require __DIR__.'/../deprecated/CompressableExternalModule.php';
+require __DIR__.'/../deprecated/CompressableService.php';
+
 use Doctrine\Common\Annotations\AnnotationReader;
 use samson\core\CompressableExternalModule;
 use samson\core\CompressableService;
