@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace samsonphp\core;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use samsonframework\core\SystemInterface;
 use samsonphp\config\Scheme;
 use samsonphp\core\exception\CannotLoadModule;
 use samsonphp\event\Event;

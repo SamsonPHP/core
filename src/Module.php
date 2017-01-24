@@ -1,5 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 namespace samsonphp\core;
+
+use samsonframework\container\ContainerInterface;
 
 /**
  * Module

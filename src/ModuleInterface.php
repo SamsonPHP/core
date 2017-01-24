@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Created by Vitaly Iegorov <egorov@samsonos.com>.
  * on 31.07.16 at 23:41
