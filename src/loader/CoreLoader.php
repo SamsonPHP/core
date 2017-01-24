@@ -57,6 +57,7 @@ class CoreLoader
 {
     /** @var ModuleManagerInterface Module manager */
     protected $moduleManager;
+
     /** @var ContainerManager Container manager */
     public $containerManager;
 
@@ -175,8 +176,6 @@ class CoreLoader
         $localModulesPath = $rootPath.DIRECTORY_SEPARATOR.'src';
         $resourceMap = ResourceMap::get($localModulesPath);
         $localModules = $resourceMap->modules;
-
-
 
         if (true || !file_exists($containerPath . '/' . $containerName . '.php')) {
             $container = $this->buildContainer($containerName, $containerNamespace, $containerPath, $modules, $localModules);
