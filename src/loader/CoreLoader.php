@@ -67,102 +67,112 @@ class CoreLoader
         $this->containerManager = $containerManager;
     }
 
+    protected function buildContainer($containerName, $containerNamespace, $containerPath, array $modules, array $localModules)
+    {
+        $builder = new DefinitionBuilder(new ParameterBuilder());
+
+        // Load project configuration
+        $projectConfig = getcwd() . '/../app/config/config.xml';
+        if (file_exists($projectConfig)) {
+            $xmlResolver = new XmlResolver();
+            $xmlResolver->resolveFile($builder, $projectConfig);
+        }
+
+        // TODO: Fix this
+        new Service('');
+        new InjectService('');
+        new InjectClass('');
+        new InjectParameter('');
+
+        foreach ($modules as $module) {
+            if ($module->className && !$builder->hasDefinition($module->className)) {
+                // Fix samson.php files
+                if (!class_exists($module->className)) {
+                    require_once($module->pathName);
+                }
+                /** @var ClassDefinition $classDefinition */
+                $classDefinition = $builder->addDefinition($module->className);
+                if ($id = $this->getModuleId($module->pathName)) {
+                    $classDefinition->setServiceName($id);
+                } else {
+                    // Generate identifier from module class
+                    $classDefinition->setServiceName(
+                        strtolower(ltrim(str_replace(__NS_SEPARATOR__, '_', $module->className), '_'))
+                    );
+                }
+                $classDefinition->addScope(new ModuleScope())->setIsSingleton(true);
+                $this->defineConstructor($classDefinition, $module->path);
+            }
+        }
+
+        $classDefinition = $builder->addDefinition(VirtualModule::class);
+        $classDefinition->addScope(new ModuleScope())->setServiceName('local')->setIsSingleton(true);
+        $this->defineConstructor($classDefinition, getcwd());
+
+        foreach ($localModules as $moduleFile) {
+            if (!$builder->hasDefinition($moduleFile[0])) {
+
+                /** @var ClassDefinition $classDefinition */
+                $classDefinition = $builder->addDefinition($moduleFile[0]);
+                $classDefinition->addScope(new ModuleScope());
+                $classDefinition->setIsSingleton(true);
+                if ($id = $this->getModuleId($moduleFile[1])) {
+                    $classDefinition->setServiceName($id);
+                } else {
+                    throw new \Exception('Can not get id of local module');
+                }
+
+                $modulePath = explode('/', str_replace(realpath($localModulesPath), '', $moduleFile[1]));
+                $this->defineConstructor($classDefinition, $localModulesPath . '/' . $modulePath[1]);
+            }
+        }
+
+        /**
+         * Add implementors
+         */
+        foreach ($this->moduleManager->implements as $interfaceName => $class) {
+            $builder->defineImplementors($interfaceName, new ClassReference($class));
+        }
+
+        // Init compiler
+        $reader = new AnnotationReader();
+        $compiler = new DefinitionCompiler(
+            new DefinitionGenerator(new ClassGenerator()),
+            (new DefinitionAnalyzer())
+                ->addClassAnalyzer(new AnnotationClassAnalyzer($reader))
+                ->addClassAnalyzer(new ReflectionClassAnalyzer())
+                ->addMethodAnalyzer(new AnnotationMethodAnalyzer($reader))
+                ->addMethodAnalyzer(new ReflectionMethodAnalyzer())
+                ->addPropertyAnalyzer(new AnnotationPropertyAnalyzer($reader))
+                ->addPropertyAnalyzer(new ReflectionPropertyAnalyzer())
+                ->addParameterAnalyzer(new ReflectionParameterAnalyzer())
+        );
+
+        return $compiler->compile($builder, $containerName, $containerNamespace, $containerPath);
+    }
+
     /**
      * Load modules
      *
      * @throws \Exception
      */
-    public function init()
+    public function init(string $rootPath)
     {
-        $containerPath = __DIR__ . '/../../../../../www/cache';
+        $containerPath = $rootPath . DIRECTORY_SEPARATOR.'www/cache';
         $containerName = 'ContainerCore';
         $containerNamespace = 'samsonphp\core\loader';
+
         /** @var Module $module */
         $modules = $this->moduleManager->getRegisteredModules();
 
-        $localModulesPath = '../src';
-//        ResourceMap::get('cache');
+        $localModulesPath = $rootPath.DIRECTORY_SEPARATOR.'src';
         $resourceMap = ResourceMap::get($localModulesPath);
         $localModules = $resourceMap->modules;
 
+
+
         if (true || !file_exists($containerPath . '/' . $containerName . '.php')) {
-
-            $builder = new DefinitionBuilder(new ParameterBuilder());
-            $xmlResolver = new XmlResolver();
-            $xmlResolver->resolveFile($builder, __DIR__ . '/../../../../../app/config/config.xml');
-
-            new Service('');
-            new InjectService('');
-            new InjectClass('');
-            new InjectParameter('');
-
-            foreach ($modules as $module) {
-                if ($module->className && !$builder->hasDefinition($module->className)) {
-                    // Fix samson.php files
-                    if (!class_exists($module->className)) {
-                        require_once($module->pathName);
-                    }
-                    /** @var ClassDefinition $classDefinition */
-                    $classDefinition = $builder->addDefinition($module->className);
-                    if ($id = $this->getModuleId($module->pathName)) {
-                        $classDefinition->setServiceName($id);
-                    } else {
-                        // Generate identifier from module class
-                        $classDefinition->setServiceName(
-                            strtolower(ltrim(str_replace(__NS_SEPARATOR__, '_', $module->className), '_'))
-                        );
-                    }
-                    $classDefinition->addScope(new ModuleScope())->setIsSingleton(true);
-                    $this->defineConstructor($classDefinition, $module->path);
-                }
-            }
-
-            $classDefinition = $builder->addDefinition(VirtualModule::class);
-            $classDefinition->addScope(new ModuleScope())->setServiceName('local')->setIsSingleton(true);
-            $this->defineConstructor($classDefinition, getcwd());
-
-            foreach ($localModules as $moduleFile) {
-                if (!$builder->hasDefinition($moduleFile[0])) {
-
-                    /** @var ClassDefinition $classDefinition */
-                    $classDefinition = $builder->addDefinition($moduleFile[0]);
-                    $classDefinition->addScope(new ModuleScope());
-                    $classDefinition->setIsSingleton(true);
-                    if ($id = $this->getModuleId($moduleFile[1])) {
-                        $classDefinition->setServiceName($id);
-                    } else {
-                        throw new \Exception('Can not get id of local module');
-                    }
-
-                    $modulePath = explode('/', str_replace(realpath($localModulesPath), '', $moduleFile[1]));
-                    $this->defineConstructor($classDefinition, $localModulesPath . '/' . $modulePath[1]);
-                }
-            }
-
-
-            /**
-             * Add implementors
-             */
-            foreach ($this->moduleManager->implements as $interfaceName => $class) {
-                $builder->defineImplementors($interfaceName, new ClassReference($class));
-            }
-
-            // Init compiler
-            $reader = new AnnotationReader();
-            $compiler = new DefinitionCompiler(
-                new DefinitionGenerator(new ClassGenerator()),
-                (new DefinitionAnalyzer())
-                    ->addClassAnalyzer(new AnnotationClassAnalyzer($reader))
-                    ->addClassAnalyzer(new ReflectionClassAnalyzer())
-                    ->addMethodAnalyzer(new AnnotationMethodAnalyzer($reader))
-                    ->addMethodAnalyzer(new ReflectionMethodAnalyzer())
-                    ->addPropertyAnalyzer(new AnnotationPropertyAnalyzer($reader))
-                    ->addPropertyAnalyzer(new ReflectionPropertyAnalyzer())
-                    ->addParameterAnalyzer(new ReflectionParameterAnalyzer())
-            );
-
-            $container = $compiler->compile($builder, $containerName, $containerNamespace, $containerPath);
-
+            $container = $this->buildContainer($containerName, $containerNamespace, $containerPath, $modules, $localModules);
         } else {
 
             $containerClassName = $containerNamespace. '\\' . $containerName;
