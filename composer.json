@@ -26,6 +26,8 @@
     "samsonframework/base": "1.*",
     "samsonframework/di": "1.*",
     "samsonframework/psr": "*",
+    "samsonframework/container": "*",
+    "samsonframework/resource": "*",
     "samsonphp/event": "1.*",
     "samsonphp/config": "1.*"
   },
